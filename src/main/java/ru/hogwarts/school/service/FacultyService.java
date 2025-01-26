@@ -11,7 +11,7 @@ import java.util.Collection;
 public class FacultyService {
 
 
-    private FacultyRepository facultyRepository;
+    private final FacultyRepository facultyRepository;
 
     public FacultyService(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
@@ -35,5 +35,13 @@ public class FacultyService {
 
     public Collection<Faculty> getAllFaculties() {
         return facultyRepository.findAll();
+    }
+
+    public Collection<Faculty> findFacultyByName(String name) {
+        return facultyRepository.findFacultyByNameIgnoreCase(name);
+    }
+
+    public Collection<Faculty> findFacultyByColor(String color) {
+        return facultyRepository.findFacultyByColorIgnoreCase(color);
     }
 }

@@ -11,7 +11,7 @@ import java.util.Collection;
 public class StudentService {
 
 
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -35,5 +35,9 @@ public class StudentService {
 
     public Collection<Student> getAllStudents() {
         return studentRepository.findAll();
+    }
+
+    public Collection<Student> findStudentsAgeMinMax(int min, int max) {
+        return studentRepository.findStudentByAgeBetween(min, max);
     }
 }

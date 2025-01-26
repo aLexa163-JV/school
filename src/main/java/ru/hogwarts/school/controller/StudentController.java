@@ -54,4 +54,9 @@ public class StudentController {
     public ResponseEntity<Collection<Student>> getAllStudents() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
+
+    @GetMapping("min-max")
+    public ResponseEntity findStudentsAgeMinMax(@RequestParam Integer min ,@RequestParam Integer max){
+        return ResponseEntity.ok(studentService.findStudentsAgeMinMax(min,max));
+    }
 }
