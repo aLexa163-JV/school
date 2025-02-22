@@ -16,14 +16,23 @@ public class Faculty {
     private String name;
     private String color;
 
+    @OneToMany(mappedBy = "faculty")
+    private List<Student> students;
+
+    public Faculty() {
+    }
+
     public Faculty(Long id, String name, String color) {
         this.id = id;
         this.name = name;
         this.color = color;
     }
 
-    @OneToMany(mappedBy = "faculty")
-    private List<Student> students;
+
+    public Faculty(String name, String color) {
+        this.name=name;
+        this.color=color;
+    }
 
     public Collection<Student> getStudents() {
         return students;
@@ -31,10 +40,6 @@ public class Faculty {
 
     public void setStudents(List<Student> students) {
         this.students = students;
-    }
-
-    public Faculty() {
-
     }
 
     public Long getId() {
@@ -83,5 +88,4 @@ public class Faculty {
                 ", students=" + students +
                 '}';
     }
-
 }
