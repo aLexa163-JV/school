@@ -20,6 +20,14 @@ public class Student {
         this.age = age;
     }
 
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public Student() {
+    }
+
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
@@ -32,8 +40,7 @@ public class Student {
         this.faculty = faculty;
     }
 
-    public Student() {
-    }
+
 
     public Long getId() {
         return id;

@@ -8,6 +8,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/student")
@@ -18,6 +19,21 @@ public class StudentController {
 
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
+    }
+
+    @GetMapping("/Total-Students")
+    public Integer getTotalStudents() {
+        return studentService.getTotalStudents();
+    }
+
+    @GetMapping("/AWG-Students")
+    public Integer getAVGStudents() {
+        return studentService.getAVGStudents();
+    }
+
+    @GetMapping("/ID-5-Students")
+    public List getLastFiveStudents() {
+        return studentService.getLastFiveStudents();
     }
 
     @GetMapping("{id}")
@@ -34,7 +50,7 @@ public class StudentController {
         return studentService.addStudent(student);
     }
 
-    @PutMapping
+    @PutMapping("{id}")
     public ResponseEntity<Student> editStudent(@RequestBody Student student, @PathVariable Long id) {
         Student foundStudent = studentService.editStudent(id, student);
         if (foundStudent == null) {
@@ -56,7 +72,7 @@ public class StudentController {
     }
 
     @GetMapping("min-max")
-    public ResponseEntity findStudentsAgeMinMax(@RequestParam Integer min ,@RequestParam Integer max){
-        return ResponseEntity.ok(studentService.findStudentsAgeMinMax(min,max));
+    public ResponseEntity findStudentsAgeMinMax(@RequestParam Integer min, @RequestParam Integer max) {
+        return ResponseEntity.ok(studentService.findStudentsAgeMinMax(min, max));
     }
 }
