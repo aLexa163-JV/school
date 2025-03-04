@@ -22,3 +22,9 @@ ALTER TABLE person
     ALTER COLUMN driver_licenses SET NOT NULL;
 
 ALTER TABLE cars ADD FOREIGN KEY(person_id) REFERENCES person(person_id);
+
+CREATE TABLE public.person_cars (
+    person_id INT REFERENCES person(person_id),
+    cars_id INT REFERENCES cars(cars_id),
+    PRIMARY KEY (person_id, cars_id)
+);
