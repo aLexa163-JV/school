@@ -10,11 +10,10 @@ import java.util.Objects;
 public class Avatar {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
-
     private String filePath;
-    private long fileSize;
+    private Long fileSize;
     private String mediaType;
 
     @Lob
@@ -24,16 +23,15 @@ public class Avatar {
     private Student student;
 
     public Avatar() {
-
     }
 
-    public Avatar(Long id, String filePath, long fileSize, String mediaType, Student student) {
-        this.id = id;
-        this.filePath = filePath;
-        this.fileSize = fileSize;
-        this.mediaType = mediaType;
-        this.student = student;
-    }
+//    public Avatar(Long id, String filePath, Long fileSize, String mediaType, Student student) {
+//        this.id = id;
+//        this.filePath = filePath;
+//        this.fileSize = fileSize;
+//        this.mediaType = mediaType;
+//        this.student = student;
+//    }
 
     public Long getId() {
         return id;
@@ -47,7 +45,7 @@ public class Avatar {
         return filePath;
     }
 
-    public void setFilePath(Path path, String filePath) {
+    public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
 
@@ -88,7 +86,12 @@ public class Avatar {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Avatar avatar = (Avatar) o;
-        return fileSize == avatar.fileSize && Objects.equals(id, avatar.id) && Objects.equals(filePath, avatar.filePath) && Objects.equals(mediaType, avatar.mediaType) && Objects.deepEquals(data, avatar.data) && Objects.equals(student, avatar.student);
+        return fileSize == avatar.fileSize
+                && Objects.equals(id, avatar.id)
+                && Objects.equals(filePath, avatar.filePath)
+                && Objects.equals(mediaType, avatar.mediaType)
+                && Objects.deepEquals(data, avatar.data)
+                && Objects.equals(student, avatar.student);
     }
 
     @Override

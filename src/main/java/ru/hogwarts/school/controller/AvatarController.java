@@ -41,7 +41,10 @@ public class AvatarController {
         headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
         headers.setContentLength(avatar.getData().length);
 
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(avatar.getData());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(headers)
+                .body(avatar.getData());
     }
 
     @GetMapping(value = "/{id}/avatar")

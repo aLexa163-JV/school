@@ -59,5 +59,4 @@ public class FacultyController {
 
         return ResponseEntity.ok(facultyService.getAllFaculties());
     }
-
 }

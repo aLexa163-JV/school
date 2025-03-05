@@ -1,6 +1,8 @@
 package ru.hogwarts.school.service;
 
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -8,9 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.AvatarRepository;
+import ru.hogwarts.school.repositories.StudentRepository;
 
 import javax.imageio.ImageIO;
-import javax.print.attribute.standard.PageRanges;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -22,22 +24,27 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 @Transactional
-public class AvatarService {
+public class AvatarService implements AvatarInterface {
 
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
-    private final StudentService studentService;
-    private final AvatarRepository avatarRepository;
+    private static final Logger logger = LoggerFactory.getLogger(AvatarService.class);
 
-    public AvatarService(StudentService studentService, AvatarRepository avatarRepository) {
-        this.studentService = studentService;
+    private final AvatarRepository avatarRepository;
+    private final StudentRepository studentRepository;
+
+
+    public AvatarService(AvatarRepository avatarRepository, StudentRepository studentRepository) {
         this.avatarRepository = avatarRepository;
+        this.studentRepository = studentRepository;
     }
 
+    @Transactional
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
-        Student student = studentService.findStudent(studentId);
-        Path filePath = Path.of(avatarsDir, student + "." + getExtension(avatarFile.getOriginalFilename()));
+        logger.info("Был вызван метод загрузки аватара");
+        Student student = studentRepository.getById(studentId);
+        Path filePath = Path.of(avatarsDir, student.getName() + student.getId() + "." + getExtension(avatarFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         try (
@@ -50,7 +57,7 @@ public class AvatarService {
         }
         Avatar avatar = findAvatar(studentId);
         avatar.setStudent(student);
-        avatar.setFilePath(filePath, toString());
+        avatar.setFilePath(filePath.toAbsolutePath().toString());
         avatar.setFileSize(avatarFile.getSize());
         avatar.setMediaType(avatarFile.getContentType());
         avatar.setData(generateDataForDB(filePath));
@@ -59,6 +66,7 @@ public class AvatarService {
     }
 
     private byte[] generateDataForDB(Path filePath) throws IOException {
+
         try (
                 InputStream is = Files.newInputStream(filePath);
                 BufferedInputStream bis = new BufferedInputStream(is, 1024);
@@ -74,11 +82,10 @@ public class AvatarService {
             ImageIO.write(preview, getExtension(filePath.getFileName().toString()), baos);
             return baos.toByteArray();
         }
-
-
     }
 
     public Avatar findAvatar(Long studentId) {
+        logger.info("Был вызван метод поиска аватара для студента с id №{}", studentId);
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
 
@@ -86,10 +93,9 @@ public class AvatarService {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
-    public List<Avatar> getAllAvatars(Integer pageNum,Integer pageSize){
-        PageRequest pageRequest = PageRequest.of(pageNum-1,pageSize);
+    public List<Avatar> getAllAvatars(Integer pageNum, Integer pageSize) {
+        logger.info("Был вызван метод поиска аватарок на странице №{} в количестве {}шт", pageNum, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize);
         return avatarRepository.findAll(pageRequest).getContent();
     }
-
-
 }
