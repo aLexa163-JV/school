@@ -75,4 +75,14 @@ public class StudentController {
     public ResponseEntity findStudentsAgeMinMax(@RequestParam Integer min, @RequestParam Integer max) {
         return ResponseEntity.ok(studentService.findStudentsAgeMinMax(min, max));
     }
+
+    @GetMapping("/names-starting-with-a")
+    public List<String> getStudentNamesStartingWithA() {
+        return studentService.getStudentNamesStartingWithA();
+    }
+
+    @GetMapping("/average-age")
+    public double getAverageAge() {
+        return studentService.getAverageAgeOfStudents();
+    }
 }

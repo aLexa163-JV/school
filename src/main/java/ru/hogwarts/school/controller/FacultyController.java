@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/faculty")
 public class FacultyController {
@@ -58,5 +60,16 @@ public class FacultyController {
         }
 
         return ResponseEntity.ok(facultyService.getAllFaculties());
+    }
+
+    @GetMapping("/longest-faculty-name")
+    public Optional<String> getLongestFacultyName() {
+        return facultyService.getLongestFacultyName();
+    }
+
+    @GetMapping("/sum")
+    public long calculateSum() {
+        int n = 1_000_000;
+        return facultyService.calculateSumUsingFormula(n);
     }
 }

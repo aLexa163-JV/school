@@ -8,6 +8,9 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class FacultyService {
@@ -53,5 +56,17 @@ public class FacultyService {
     public Collection<Faculty> findFacultyByColor(String color) {
         logger.info("Был вызван метод поиска факультета по цвету = {}", color);
         return facultyRepository.findFacultyByColorIgnoreCase(color);
+    }
+
+    public Optional<String> getLongestFacultyName() {
+        logger.info("Был вызван метод который возвращает самое длинное название факультета");
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length));
+    }
+
+    public long calculateSumUsingFormula(int n) {
+        logger.info("Был вызван метод который возвращает целочисленное значение");
+        return (long) n * (n + 1) / 2;
     }
 }
