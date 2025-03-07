@@ -67,9 +67,13 @@ public class FacultyController {
         return facultyService.getLongestFacultyName();
     }
 
-    @GetMapping("/sum")
-    public long calculateSum() {
-        int n = 1_000_000;
-        return facultyService.calculateSumUsingFormula(n);
+    @GetMapping("/sum/parallel")
+    public long calculateSumParallel() {
+        return facultyService.calculateSumUsingFormulaParallel();
+    }
+
+    @GetMapping("/sum/no-parallel")
+    public long calculateSumNoParallel() {
+        return facultyService.calculateSumUsingFormulaNoParallel();
     }
 }

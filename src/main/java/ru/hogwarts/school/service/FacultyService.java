@@ -65,8 +65,20 @@ public class FacultyService {
                 .max(Comparator.comparingInt(String::length));
     }
 
-    public long calculateSumUsingFormula(int n) {
+    public long calculateSumUsingFormulaParallel() {
+        logger.info("Был вызван метод который возвращает целочисленное значение(парал.стрим)");
+        int sum = Stream.iterate(1, a -> a + 1)
+                .limit(1_000_000)
+                .parallel()
+                .reduce(0, (a, b) -> a + b);
+        return sum;
+    }
+
+    public long calculateSumUsingFormulaNoParallel() {
         logger.info("Был вызван метод который возвращает целочисленное значение");
-        return (long) n * (n + 1) / 2;
+        int sum = Stream.iterate(1, a -> a + 1)
+                .limit(1_000_000)
+                .reduce(0, (a, b) -> a + b);
+        return sum;
     }
 }
