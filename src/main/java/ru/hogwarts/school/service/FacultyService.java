@@ -10,6 +10,7 @@ import ru.hogwarts.school.repositories.FacultyRepository;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Service
@@ -67,11 +68,10 @@ public class FacultyService {
 
     public long calculateSumUsingFormulaParallel() {
         logger.info("Был вызван метод который возвращает целочисленное значение(парал.стрим)");
-        int sum = Stream.iterate(1, a -> a + 1)
+        return IntStream.iterate(1, a -> a + 1)
                 .limit(1_000_000)
                 .parallel()
-                .reduce(0, (a, b) -> a + b);
-        return sum;
+                .sum();
     }
 
     public long calculateSumUsingFormulaNoParallel() {
