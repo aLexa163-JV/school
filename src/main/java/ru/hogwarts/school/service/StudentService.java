@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.StudentRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -86,22 +87,21 @@ public class StudentService {
                 .orElse(0.0);
     }
 
-    private List<String> student = Arrays.asList("студент", "студент1", "студент2", "студент3", "студент4", "студент5");
-
     public void printStudentsParallel() {
         logger.info("Был вызван метод который выводит в консоль имена всех студентов в параллельном режиме");
+        List<Student> student = studentRepository.findAll();
 
-        System.out.println(student.get(0));
-        System.out.println(student.get(1));
+        System.out.println(student.get(0).getName());
+        System.out.println(student.get(1).getName());
 
         new Thread(() -> {
-            System.out.println(student.get(2));
-            System.out.println(student.get(3));
+            System.out.println(student.get(2).getName());
+            System.out.println(student.get(3).getName());
         }).start();
 
         new Thread(() -> {
-            System.out.println(student.get(4));
-            System.out.println(student.get(5));
+            System.out.println(student.get(4).getName());
+            System.out.println(student.get(5).getName());
         }).start();
     }
 
@@ -111,17 +111,19 @@ public class StudentService {
 
     public void printStudentsSynchronized() {
         logger.info("Был вызван метод который выводит в консоль имена всех студентов в синхронном режиме");
-        printStudentName(student.get(0));
-        printStudentName(student.get(1));
+        List<Student> student = studentRepository.findAll();
+
+        printStudentName(student.get(0).getName());
+        printStudentName(student.get(1).getName());
 
         new Thread(() -> {
-            printStudentName(student.get(2));
-            printStudentName(student.get(3));
+            printStudentName(student.get(2).getName());
+            printStudentName(student.get(3).getName());
         }).start();
 
         new Thread(() -> {
-            printStudentName(student.get(4));
-            printStudentName(student.get(5));
+            printStudentName(student.get(4).getName());
+            printStudentName(student.get(5).getName());
         }).start();
     }
 }
