@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.StudentRepository;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,5 +84,44 @@ public class StudentService {
                 .mapToInt(Student::getAge)
                 .average()
                 .orElse(0.0);
+    }
+
+    private List<String> student = Arrays.asList("студент", "студент1", "студент2", "студент3", "студент4", "студент5");
+
+    public void printStudentsParallel() {
+        logger.info("Был вызван метод который выводит в консоль имена всех студентов в параллельном режиме");
+
+        System.out.println(student.get(0));
+        System.out.println(student.get(1));
+
+        new Thread(() -> {
+            System.out.println(student.get(2));
+            System.out.println(student.get(3));
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(student.get(4));
+            System.out.println(student.get(5));
+        }).start();
+    }
+
+    private synchronized void printStudentName(String name) {
+        System.out.println(name);
+    }
+
+    public void printStudentsSynchronized() {
+        logger.info("Был вызван метод который выводит в консоль имена всех студентов в синхронном режиме");
+        printStudentName(student.get(0));
+        printStudentName(student.get(1));
+
+        new Thread(() -> {
+            printStudentName(student.get(2));
+            printStudentName(student.get(3));
+        }).start();
+
+        new Thread(() -> {
+            printStudentName(student.get(4));
+            printStudentName(student.get(5));
+        }).start();
     }
 }
