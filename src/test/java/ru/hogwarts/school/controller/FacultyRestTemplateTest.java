@@ -1,8 +1,6 @@
-package ru.hogwarts.school;
+package ru.hogwarts.school.controller;
 
-import org.hibernate.mapping.Collection;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,11 +13,14 @@ import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class FacultyTestRestTemplate {
+public class FacultyRestTemplateTest {
 
     @LocalServerPort
     private int port;
@@ -81,9 +82,10 @@ public class FacultyTestRestTemplate {
 
     @Test
     public void testDeleteFaculty() {
-        testRestTemplate.delete("/faculty/1");
-        ResponseEntity<Faculty> response = testRestTemplate.getForEntity("/faculty/1", Faculty.class);
-        assertThat(response.getStatusCode());
+        Faculty faculty = facultyRepository.save(new Faculty("Гриф", "красный"));
+        testRestTemplate.delete("http://localhost:" + port + "/faculty/" + faculty.getId());
+        Optional<Faculty> actual = facultyRepository.findById(faculty.getId());
+        assertFalse(actual.isPresent());
 
     }
 
